@@ -44,7 +44,13 @@ class BookController extends Controller
             ->with('success', '書籍を登録しました。');
     }
     
-    public function show(Book $book) {}
+    /**
+     * 書籍詳細を表示
+     */
+    public function show(Book $book)
+    {
+        return view('books.show', compact('book'));
+    }
     public function edit(Book $book) {}
     public function update(Request $request, Book $book) {}
     public function destroy(Book $book) {}
