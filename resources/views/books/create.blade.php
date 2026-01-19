@@ -53,6 +53,24 @@
                 @enderror
             </div>
 
+            {{-- カテゴリ --}}
+            <div class="mb-4">
+                <label for="category_id" class="block text-gray-700 font-medium mb-2">カテゴリ</label>
+                <select name="category_id" id="category_id"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">
+                    <option value="">選択してください</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}"
+                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             {{-- ボタン --}}
             <div class="flex space-x-4">
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">

@@ -44,6 +44,12 @@
             </div>
         </div>
 
+        @if ($book->category)
+            <p class="text-gray-600 mb-4">
+                カテゴリ: <span class="px-2 py-1 bg-gray-200 rounded">{{ $book->category->name }}</span>
+            </p>
+        @endif
+
         {{-- アクションボタン --}}
         <div class="flex space-x-4 mt-8 pt-6 border-t border-gray-200">
             <a href="{{ route('books.edit', $book) }}"
