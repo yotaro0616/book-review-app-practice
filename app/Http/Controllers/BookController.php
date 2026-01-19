@@ -51,7 +51,33 @@ class BookController extends Controller
     {
         return view('books.show', compact('book'));
     }
-    public function edit(Book $book) {}
-    public function update(Request $request, Book $book) {}
+
+    /**
+    * 書籍編集画面を表示
+    */
+    public function edit(Book $book)
+    {
+        return view('books.edit', compact('book'));
+    }
+
+    /**
+     * 書籍を更新
+     */
+    public function update(Request $request, Book $book)
+    {
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'author' => 'required|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|max:10000',
+        ]);
+
+        $book->update($validated);
+
+        return redirect()
+            ->route('books.show', $book)
+            ->with('success', '書籍を更新しました。');
+    }    
+    
     public function destroy(Book $book) {}
 }
