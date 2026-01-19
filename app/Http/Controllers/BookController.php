@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -12,9 +13,12 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::latest()->get();
+        $categories = Category::all();
         
-        return view('books.index', compact('books'));
+        // ログインユーザーの書籍のみ取得
+        $books = auth()->user()->books()->with('category')->latest()->get();
+        
+        return view('books.index', compact('books', 'categories'));
     }
 
     /**
@@ -22,7 +26,9 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+        $categories = Category::all();
+
+        return view('books.create', compact('categories'));
     }
 
     /**
@@ -33,11 +39,13 @@ class BookController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:255',
             'author' => 'required|max:255',
+            'category_id' => 'nullable|exists:categories,id',
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|max:10000',
         ]);
 
-        Book::create($validated);
+        // ログインユーザーの書籍として作成
+        auth()->user()->books()->create($validated);
 
         return redirect()
             ->route('books.index')
@@ -49,15 +57,18 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        $this->authorize('view', $book);
+
         return view('books.show', compact('book'));
     }
 
-    /**
-    * 書籍編集画面を表示
-    */
     public function edit(Book $book)
     {
-        return view('books.edit', compact('book'));
+        $this->authorize('update', $book);
+        
+        $categories = Category::all();
+        
+        return view('books.edit', compact('book', 'categories'));
     }
 
     /**
@@ -65,9 +76,12 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
+        $this->authorize('update', $book);
+        
         $validated = $request->validate([
             'title' => 'required|max:255',
             'author' => 'required|max:255',
+            'category_id' => 'nullable|exists:categories,id',
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|max:10000',
         ]);
@@ -84,6 +98,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        $this->authorize('delete', $book);
+        
         $book->delete();
 
         return redirect()

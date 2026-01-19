@@ -20,8 +20,12 @@
                                 {{ $book->title }}
                             </a>
                         </h2>
-                        <p class="text-gray-600 text-sm mt-1">
-                            著者: {{ $book->author }}
+                        <p class="text-gray-600">
+                            {{ $book->author }}
+                            @if ($book->category)
+                                <span
+                                    class="ml-2 px-2 py-1 bg-gray-200 rounded text-sm">{{ $book->category->name }}</span>
+                            @endif
                         </p>
                         <div class="flex items-center mt-2">
                             {{-- 評価（星表示） --}}
