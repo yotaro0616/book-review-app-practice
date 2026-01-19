@@ -7,7 +7,6 @@
             </a>
 
             {{-- ナビゲーションリンク --}}
-            {{--
             <div class="flex items-center space-x-4">
                 @auth
                     <span class="text-gray-300">
@@ -28,7 +27,6 @@
                     </a>
                 @endauth
             </div>
-            --}}
         </div>
     </div>
 </nav>

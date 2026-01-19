@@ -7,4 +7,7 @@ Route::get('/', function () {
     return redirect()->route('books.index');
 });
 
-Route::resource('books', BookController::class);
+// 認証が必要なルート
+Route::middleware('auth')->group(function () {
+    Route::resource('books', BookController::class);
+});
