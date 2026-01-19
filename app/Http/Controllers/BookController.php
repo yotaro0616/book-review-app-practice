@@ -79,5 +79,15 @@ class BookController extends Controller
             ->with('success', '書籍を更新しました。');
     }    
     
-    public function destroy(Book $book) {}
+    /**
+     * 書籍を削除
+     */
+    public function destroy(Book $book)
+    {
+        $book->delete();
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', '書籍を削除しました。');
+    }
 }
